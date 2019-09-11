@@ -3,9 +3,19 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Bird 
 from .forms import LocationForm
 
-# Add the following import
+class BirdCreate(CreateView):
+    model = Bird
+    fields = '__all__'
+    success_url = '/birds/'
 
-# Define the home view
+class BirdUpdate(UpdateView):
+    model = Bird
+    fields = ['breed', 'description', 'age']
+
+class BirdDelete(DeleteView):
+    model = Bird
+    success_url = '/birds/'
+
 def home(request):
     return render(request, 'home.html')
 
@@ -21,15 +31,11 @@ def birds_detail(request, bird_id):
     location_form = LocationForm()
     return render(request, 'birds/detail.html', {'bird': bird, 'location_form': location_form})
 
-class BirdCreate(CreateView):
-    model = Bird
-    fields = '__all__'
-    success_url = '/birds/'
+def add_location(request, bird_id):
+    form = LocationForm(request.POST)
+    if form.is_valid():
+        new_location = form.save(commit=False)
+        new_location.bird_id = bird_id
+        new_location.save()
+    return redirect('detail', bird_id=bird_id)
 
-class BirdUpdate(UpdateView):
-    model = Bird
-    fields = ['breed', 'description', 'age']
-
-class BirdDelete(DeleteView):
-    model = Bird
-    success_url = '/birds/'

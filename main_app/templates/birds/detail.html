@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class='col s6'>
-    <form method='post'>
+    <form action="{% url 'add_location' bird.id %}" method='post'>
       {% csrf_token %}
       {{ location_form.as_p }}
       <input type='submit' class='btn' value='Add Location'>
@@ -45,4 +45,16 @@
     </table>
   </div>
 </div>
+<script>
+  var dateEl = document.getElementById('id_date');
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true,
+  });
+
+  var selectEl = document.getElementById('id_location');
+  M.FormSelect.init(selectEl);
+</script>
 {% endblock %}

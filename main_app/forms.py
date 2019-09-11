@@ -3,5 +3,5 @@ from .models import Location
 
 class LocationForm(ModelForm):
     class Meta: 
-        model = Feeding
+        model = Location
         fields = ['date', 'location']
