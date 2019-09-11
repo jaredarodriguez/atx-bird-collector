@@ -32,5 +32,10 @@ class Location(models.Model):
     bird = models.ForeignKey(Bird, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.get_location_display()} on {self.date}"
+        return f"{self.get_location_display()} on {self.date}" 
+
+    class Meta:
+        ordering = ['-date']
+    
+
 

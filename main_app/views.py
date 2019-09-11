@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 from .models import Bird 
 from .forms import LocationForm
