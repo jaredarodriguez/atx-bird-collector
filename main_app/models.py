@@ -1,7 +1,12 @@
 from django.db import models
 from django.urls import reverse
 
-# Create your models here.
+LOCATIONS = (
+    ('N', 'North'),
+    ('S', 'South'),
+    ('E', 'East'),
+    ('W', 'West')
+)
 
 
 class Bird(models.Model):
@@ -15,3 +20,17 @@ class Bird(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'bird_id': self.id})
+
+class Location(models.Model):
+    date = models.DateField('location date')
+    location = models.CharField(
+        max_length=1, 
+        choices=LOCATIONS, 
+        default=LOCATIONS[0][0]
+    )
+
+    bird = models.ForeignKey(Bird, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.get_location_display()} on {self.date}"
+
