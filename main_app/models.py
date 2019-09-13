@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from datetime import date 
 
 LOCATIONS = (
     ('N', 'North'),
@@ -8,15 +9,25 @@ LOCATIONS = (
     ('W', 'West')
 )
 
+class Trait(models.Model):
+    name = models.CharField(max_length=50)
+    color= models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name 
+    
+    def get_absolute_url(self):
+        return reverse('traits_detail', kwargs={'pk': self.id})
 
 class Bird(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
     age = models.IntegerField()
+    traits = models.ManyToManyField(Trait)
 
     def __str__(self): 
-        return f'{self.name} ({self.id})' 
+        return self.name 
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'bird_id': self.id})
@@ -28,7 +39,6 @@ class Location(models.Model):
         choices=LOCATIONS, 
         default=LOCATIONS[0][0]
     )
-
     bird = models.ForeignKey(Bird, on_delete=models.CASCADE)
 
     def __str__(self):
