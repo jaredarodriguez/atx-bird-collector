@@ -11,6 +11,7 @@ urlpatterns = [
     path('birds/<int:pk>/delete/', views.BirdDelete.as_view(), name='birds_delete'),
     path('birds/<int:bird_id>/add_location/', views.add_location, name='add_location'),
     path('birds/<int:bird_id>/assoc_trait/<int:trait_id>/', views.assoc_trait, name='assoc_trait'),
+    path('birds/<int:bird_id>/unassoc_trait/<int:trait_id>/', views.unassoc_trait, name='unassoc_trait'),
     path('traits/', views.TraitList.as_view(), name='traits_index'),
     path('traits/<int:pk>/', views.TraitDetail.as_view(), name='traits_detail'),
     path('traits/create/', views.TraitCreate.as_view(), name='traits_create'),

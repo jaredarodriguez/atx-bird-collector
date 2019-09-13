@@ -48,6 +48,10 @@ def assoc_trait(request, bird_id, trait_id):
     Bird.objects.get(id=bird_id).traits.add(trait_id)
     return redirect('detail', bird_id=bird_id)
 
+def unassoc_trait(request, bird_id, trait_id):
+    Bird.objects.get(id=bird_id).traits.remove(trait_id)
+    return redirect('detail', bird_id=bird_id)
+
 class TraitList(ListView):
     model = Trait 
 

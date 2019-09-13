@@ -60,6 +60,12 @@
           A <span style="color: {{ trait.color }}">{{ trait.color }}</span> {{ trait.name }}
         </span>
       </div>
+      <div class="card-action">
+        <form action="{% url 'unassoc_trait' bird.id trait.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn">Remove</button>
+        </form>
+      </div>
     </div>
     {% endfor %}
     {% else %}
