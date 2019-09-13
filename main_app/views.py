@@ -1,8 +1,15 @@
 from django.shortcuts import render, redirect 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 from django.views.generic import ListView, DetailView 
-from .models import Bird, Trait 
+
+import boto3
+import uuid
+
+from .models import Bird, Trait, Photo 
 from .forms import LocationForm
+
+S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+BUCKET = 'atxbirdcollector'
 
 class BirdCreate(CreateView):
     model = Bird
@@ -69,3 +76,18 @@ class TraitUpdate(UpdateView):
 class TraitDelete(DeleteView):
     model = Trait 
     success_url = '/traits/'
+
+def add_photo(request, bird_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file: 
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try: 
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f'{S3_BASE_URL}{BUCKET}/{key}'
+            photo = Photo(url=url, bird_id=bird_id)
+            photo.save()
+        except:
+            print('An error occurred uploading file to S3')
+    return redirect('detail', bird_id=bird_id)
+
